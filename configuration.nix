@@ -70,6 +70,7 @@
     wget
     git
     python3
+    #nixos-generators
   ]; # **parameter for including additional packages
 
   services.openssh = {
@@ -79,7 +80,7 @@
     PasswordAuthentication = true;
     AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ] # **parameter for allowed users
     UseDns = true;
-    X11Forwarding = false;
+    X11Forwarding = true;
     PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no" # **parameter for permit root log in
   };
 };
@@ -87,19 +88,19 @@
 networking.firewall = {
   enable = true;
   allowPing = false; # ** parameter to configure whether or not replying to ICMP requests is allowed
-  allowedTCPPorts = []; # **parameter for allowed TCP ports
+  allowedTCPPorts = [ 22 ]; # **parameter for allowed TCP ports
   allowedUDPPorts = []; # **parameter for allowed UDP ports
   extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
-  interfaces.interfacename1 = {
-    allowedTCPPorts = []; # **parameter for allowed TCP ports
-    allowedUDPPorts = []; # **parameter for allowed UDP ports
-    extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
-  } # **parameters for interface specific rules
-  interfaces.interfacename2 = {
-    allowedTCPPorts = []; # **parameter for allowed TCP ports
-    allowedUDPPorts = []; # **parameter for allowed UDP ports
-    extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
-  }
+  #interfaces.interfacename1 = {
+    #allowedTCPPorts = []; # **parameter for allowed TCP ports
+    #allowedUDPPorts = []; # **parameter for allowed UDP ports
+    #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
+  #} # **parameters for interface specific rules
+  #interfaces.interfacename2 = {
+    #allowedTCPPorts = []; # **parameter for allowed TCP ports
+    #allowedUDPPorts = []; # **parameter for allowed UDP ports
+    #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
+  #}
 }
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
