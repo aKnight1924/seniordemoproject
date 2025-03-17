@@ -101,7 +101,7 @@ networking.firewall = {
     #allowedUDPPorts = []; # **parameter for allowed UDP ports
     #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
   #}
-}
+};
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
