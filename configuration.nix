@@ -68,7 +68,7 @@
   environment.systemPackages = with pkgs; [
     wget
     git
-    python312.withPackages (ps: with ps; [ 
+    pkgs.python312.withPackages (ps: with ps; [ 
       npyscreen
     ])
     #nixos-generators
