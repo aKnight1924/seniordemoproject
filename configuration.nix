@@ -68,10 +68,9 @@
   environment.systemPackages = with pkgs; [
     wget
     git
-    (python3.withPackages (python-pkgs: with python-pkgs; [
-      npyscreen
-  ]))
-    #nixos-generators
+    python3
+    nixos-generators
+    devenv
   ]; # **parameter for including additional packages
 
   services.openssh = {
