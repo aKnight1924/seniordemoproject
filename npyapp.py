@@ -11,7 +11,7 @@ class MyTestApp(npyscreen.NPSAppManaged):
 
 class MainForm(npyscreen.Form):
     def create(self):
-        self.add(npyscreen.TitleText, name = "Text:", value= "Hellow World!" )
+        self.allowedThroughFirewall = self.add(npyscreen.TitleSelectOne,max_height=4, name='Service Allowed Through The Firewall:', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
 
     def afterEditing(self):
         self.parentApp.setNextForm(None)
