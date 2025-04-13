@@ -69,8 +69,7 @@ class OtherOptionsForm(npyscreen.ActionForm):
         config_data.append(' '.join(map(str,self.parentApp.allowedOn)))
         config_data.append("Services allowed from:")
         config_data.append(' '.join(map(str,self.parentApp.allowedOut)))
-        Path("/SavedConfigs").mkdir(parents=True, exist_ok=True)
-        file = open("/SavedConfigs/TestConfig.txt", 'w')
+        file = open("TestConfig.txt", 'w')
         for line in config_data:
                 file.write(line + '\n')
         file.close()
