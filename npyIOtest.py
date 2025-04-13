@@ -1,4 +1,5 @@
 import npyscreen
+from pathlib import Path
 
 # This application class serves as a wrapper for the initialization of curses
 # and also manages the actual forms of the application
@@ -68,7 +69,8 @@ class OtherOptionsForm(npyscreen.ActionForm):
         config_data.append(' '.join(map(str,self.parentApp.allowedOn)))
         config_data.append("Services allowed from:")
         config_data.append(' '.join(map(str,self.parentApp.allowedOut)))
-        file = open("/GeneratedConfigurationFiles/TestConfig.txt", 'w')
+        Path("/SavedConfigs").mkdir(parents=True, exist_ok=True)
+        file = open("/SavedConfigs/TestConfig.txt", 'w')
         for line in config_data:
                 file.write(line + '\n')
         file.close()
