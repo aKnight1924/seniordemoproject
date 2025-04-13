@@ -73,6 +73,9 @@
     devenv
   ]; # **parameter for including additional packages
 
+  nix.extraOptions = ''
+    trusted-users = root admin
+  '';
   services.openssh = {
   enable = true;  # **parameter for enable ssh
   ports = [ 22 ]; # **parameter for ssh port
