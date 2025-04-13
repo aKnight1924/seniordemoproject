@@ -63,11 +63,11 @@ class OtherOptionsForm(npyscreen.Form):
     def on_ok(self):
         config_data = [
             "Services allowed through:"]
-        config_data.append(' '.join(map(str,self.allowedThrough.value)))
+        config_data.append(' '.join(map(str,self.parentApp.allowedThrough)))
         config_data.append("Services allowed on:")
-        config_data.append(' '.join(map(str,self.allowedOn.value)))
+        config_data.append(' '.join(map(str,self.parentApp.allowedOn)))
         config_data.append("Services allowed from:")
-        config_data.append(' '.join(map(str,self.allowedFrom.value)))
+        config_data.append(' '.join(map(str,self.parentApp.allowedFrom)))
         with open("TestConfig.txt", 'w') as file:
             for line in config_data:
                 file.write(line + '\n')
