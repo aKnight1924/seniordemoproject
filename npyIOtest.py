@@ -19,7 +19,7 @@ class MainForm(npyscreen.ActionForm):
         self.parentApp.setNextForm("AllowedOn")
 
     def create(self):
-        self.allowedThrough = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Select which services are allowed to be accessed through the firewall (forwarded packets):', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
+        self.allowedThrough = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Select which services are allowed to be accessed through the firewall:', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
 
     def on_ok(self):
         self.parentApp.allowedThrough = self.allowedThrough.value
@@ -32,7 +32,7 @@ class AllowedOnForm(npyscreen.Form):
         self.parentApp.setNextForm("AllowedOut")
         
     def create(self):
-        self.allowedOn = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Select which services are allowed to be accessed on the firewall (incoming packets):', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
+        self.allowedOn = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Select which services are allowed to be accessed on the firewall:', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
 
     def on_ok(self):
         self.parentApp.allowedOn = self.allowedOn.value
@@ -45,7 +45,7 @@ class AllowedOutForm(npyscreen.Form):
         self.parentApp.setNextForm("OtherOptions")
         
     def create(self):
-        self.allowedOut = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Select which services are allowed to be accessed from the firewall (outgoing packets):', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
+        self.allowedOut = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Select which services are allowed to be accessed from the firewall:', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
 
     def on_ok(self):
         self.parentApp.allowedOut = self.allowedOut.value
