@@ -229,7 +229,6 @@ class OtherOptionsForm(npyscreen.ActionForm):
             "    iptables -A nixos-fw-output -j nixos-fw-log-refuse",
             "  '';",
             '  extraStopCommands = []; # removes the previous commands on shut down; checks if the rules exist before deleting to ensure idempotency',
-            '  }',
             '};',
             '',
             '  # Copy the NixOS configuration file and link it from the resulting system',
