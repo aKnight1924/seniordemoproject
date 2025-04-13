@@ -14,17 +14,22 @@ class MainForm(npyscreen.ActionForm):
     def activate(self):
         self.edit()
         self.parentApp.setNextForm("TestDisplay")
+
     def create(self):
-        self.allowedThrough = self.add(npyscreen.TitleSelectOne,max_height=4, name='Services Allowed to Be Access Through The Firewall:', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
+        self.allowedThrough = self.add(npyscreen.TitleMultiSelect,max_height=4, name='Services Allowed to Be Access Through The Firewall:', values=['HTTPS', 'SSH', 'RDP'],scroll_exit=True)
+
     def on_ok(self):
         toTest = self.parentApp.getForm("TestDisplay")
-        toTest.selected.value = self.allowedThrough.values[self.allowedThrough.value[0]]
+        toTest.selected.value = []
+        for x in self.allowedThrough.value:
+            toTest.selected.value.append(self.allowedThrough.values[x])
         self.parentApp.switchForm("TestDisplay")
 
 class TestDisplayForm(npyscreen.Form):
     def activate(self):
         self.edit()
         self.parentApp.setNextForm(None)
+        
     def create(self):
         self.selected = self.add(npyscreen.TitleFixedText,max_height=4,name="Service Selected: ")
 
