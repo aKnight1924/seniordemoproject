@@ -26,7 +26,7 @@ class MainForm(npyscreen.ActionForm):
         self.parentApp.switchForm("AllowedOn")
 
 
-class AllowedOnForm(npyscreen.Form):
+class AllowedOnForm(npyscreen.ActionForm):
     def activate(self):
         self.edit()
         self.parentApp.setNextForm("AllowedOut")
@@ -39,7 +39,7 @@ class AllowedOnForm(npyscreen.Form):
         self.parentApp.switchForm("AllowedOut")
 
 
-class AllowedOutForm(npyscreen.Form):
+class AllowedOutForm(npyscreen.ActionForm):
     def activate(self):
         self.edit()
         self.parentApp.setNextForm("OtherOptions")
@@ -52,7 +52,7 @@ class AllowedOutForm(npyscreen.Form):
         self.parentApp.switchForm("OtherOptions")
 
 
-class OtherOptionsForm(npyscreen.Form):
+class OtherOptionsForm(npyscreen.ActionForm):
     def activate(self):
         self.edit()
         self.parentApp.setNextForm(None)
