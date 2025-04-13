@@ -177,14 +177,14 @@ class OtherOptionsForm(npyscreen.ActionForm):
             '    "admin"',
             '    ];',
             '',
-            '  services.openssh = {',
+            '  services.openssh = {'
             ]
         if 0 in self.parentApp.allowedIn:
             config_data.append('    enable = true;  # **parameter for enabling ssh')
         else:
             config_data.append('    enable = false;  # **parameter for enabling ssh')
-        config_data.append('    ports = [ {self.customSSHPort.value} ]; # **parameter for ssh port')
-        config_data.append([
+        config_data.append(f'    ports = [ {self.customSSHPort.value} ]; # **parameter for ssh port')
+        config_data.extend([
             '    settings = {',
             '       PasswordAuthentication = true;',
             '       AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ] # **parameter for allowed users',
@@ -201,32 +201,32 @@ class OtherOptionsForm(npyscreen.ActionForm):
             "    iptables -N nixos-fw-output",
             "    iptables -A FORWARD -j nixos-fw-forward",
             "    iptables -A OUTPUT -j nixos-fw-output",
-            "    iptables -D nixos-fw 1 -p tcp || true",
+            "    iptables -D nixos-fw 1 -p tcp || true"
             ])
         #Forward chain commands
         for x in portsAllowedThroughTcp:
-            config_data.append("    iptables -A nixos-fw-forward -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -A nixos-fw-forward -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedThroughUdp:
-            config_data.append("    iptables -A nixos-fw-forward -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -A nixos-fw-forward -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         config_data.append("    iptables -A nixos-fw-forward -m state --state RELATED,ESTABLISHED -j nixos-fw-accept")
         config_data.append("    iptables -A nixos-fw-forward -j nixos-fw-log-refuse")
         #Input chain commands 
         for x in portsAllowedInUdp:
-            config_data.append("    iptables -I nixos-fw 1 -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -I nixos-fw 1 -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedInTcp:
-            config_data.append("    iptables -I nixos-fw 1 -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -I nixos-fw 1 -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         if dhcpIn == True:
             config_data.append("    iptables -I nixos-fw 1 -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
         #Output chain commands
-        if dhcpIn == True:
+        if dhcpOut == True:
             config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
         for x in portsAllowedOutTcp:
-            config_data.append("    iptables -A nixos-fw-output -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -A nixos-fw-output -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedOutUdp:
-            config_data.append("    iptables -A nixos-fw-output -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
-        config_data.append([
-            "    iptables -A nixos-fw-output -m state --state RELATED,ESTABLISHED -j nixos-fw-accept"
-            "    iptables -A nixos-fw-output -j nixos-fw-log-refuse"
+            config_data.append(f"    iptables -A nixos-fw-output -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+        config_data.extend([
+            "    iptables -A nixos-fw-output -m state --state RELATED,ESTABLISHED -j nixos-fw-accept",
+            "    iptables -A nixos-fw-output -j nixos-fw-log-refuse",
             "  '';",
             '  extraStopCommands = []; # removes the previous commands on shut down; checks if the rules exist before deleting to ensure idempotency',
             '  }',
@@ -255,7 +255,7 @@ class OtherOptionsForm(npyscreen.ActionForm):
             '  #',
             '  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .',
             '  system.stateVersion = "24.11"; # Did you read the comment?',
-            '}',
+            '}'
             ])
         file = open("TestConfig.txt", 'w')
         for line in config_data:
