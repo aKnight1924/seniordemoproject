@@ -68,9 +68,10 @@ class OtherOptionsForm(npyscreen.Form):
         config_data.append(' '.join(map(str,self.parentApp.allowedOn)))
         config_data.append("Services allowed from:")
         config_data.append(' '.join(map(str,self.parentApp.allowedFrom)))
-        with open("TestConfig.txt", 'w') as file:
-            for line in config_data:
+        file = open("TestConfig.txt", 'w')
+        for line in config_data:
                 file.write(line + '\n')
+        file.close()
         self.parentApp.switchForm(None)
     
 
