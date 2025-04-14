@@ -28,6 +28,7 @@
   
   services.envfs.enable = false;
   services.xserver.enable = true;
+  services.displayManager.ssdm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
