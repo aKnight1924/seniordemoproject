@@ -200,8 +200,7 @@ class OtherOptionsForm(npyscreen.ActionForm):
             "    iptables -N nixos-fw-forward",
             "    iptables -N nixos-fw-output",
             "    iptables -A FORWARD -j nixos-fw-forward",
-            "    iptables -A OUTPUT -j nixos-fw-output",
-            "    iptables -D nixos-fw 1 -p tcp || true"
+            "    iptables -A OUTPUT -j nixos-fw-output"
             ])
         #Forward chain commands
         for x in portsAllowedThroughTcp:
@@ -212,11 +211,11 @@ class OtherOptionsForm(npyscreen.ActionForm):
         config_data.append("    iptables -A nixos-fw-forward -j nixos-fw-log-refuse")
         #Input chain commands 
         for x in portsAllowedInUdp:
-            config_data.append(f"    iptables -I nixos-fw 1 -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -I nixos-fw 2 -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedInTcp:
-            config_data.append(f"    iptables -I nixos-fw 1 -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -I nixos-fw 2 -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         if dhcpIn == True:
-            config_data.append("    iptables -I nixos-fw 1 -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
+            config_data.append("    iptables -I nixos-fw 2 -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
         #Output chain commands
         if dhcpOut == True:
             config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
