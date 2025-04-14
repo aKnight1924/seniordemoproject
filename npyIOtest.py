@@ -131,7 +131,7 @@ class OtherOptionsForm(npyscreen.ActionForm):
             '  ',
             '  services.envfs.enable = false;',
             '  services.xserver.enable = true;',
-            '  services.displayManager.sddm.wayland.enable = true;',
+            '  services.displayManager.sddm.enable = true;',
             '  services.desktopManager.plasma6.enable = true;',
             '',
             '  # Enable CUPS to print documents.',
