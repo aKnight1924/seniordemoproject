@@ -27,9 +27,11 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   
   services.envfs.enable = false;
-  services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
