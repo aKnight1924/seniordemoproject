@@ -26,7 +26,7 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
   
-  services.envfs.enable = true;
+  services.envfs.enable = false;
   services.xserver.enable = true;
   services.desktopManager.plasma6.enable = true;
 
@@ -97,21 +97,11 @@ networking.firewall = {
   #allowedUDPPorts = []; # **parameter for allowed UDP ports
   #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
   #extraStopCommands = []; # removes the previous commands on shut down
-  #interfaces.interfacename1 = {
-    #allowedTCPPorts = []; # **parameter for allowed TCP ports
-    #allowedUDPPorts = []; # **parameter for allowed UDP ports
-    #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
-  #} # **parameters for interface specific rules
-  #interfaces.interfacename2 = {
-    #allowedTCPPorts = []; # **parameter for allowed TCP ports
-    #allowedUDPPorts = []; # **parameter for allowed UDP ports
-    #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
-  #}
 };
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
+  # systemgit add.copySystemConfiguration = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
