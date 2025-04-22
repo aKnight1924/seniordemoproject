@@ -62,10 +62,10 @@ class OtherOptionsForm(npyscreen.ActionForm):
         self.public = self.add(npyscreen.TitleText, name='Set public interface name:', value='enp0s8')
         self.private = self.add(npyscreen.TitleText, name='Set public interface name:', value='enp0s9')
         self.mDHCP = self.add(npyscreen.TitleMultiLine, name='Block multicast DHCP?', values=['Yes', 'No'])
-        self.icmpFrag = self.add(npyscreen.TitleMultiLine, name='Protect from ICMP Fragmentation attacks?', values=['Yes', 'No'])
-        self.icmpSmurf = self.add(npyscreen.TitleMultiLine, name='Protect from ICMP Smurf attacks?', values=['Yes', 'No'])
-        self.icmpEcho = self.add(npyscreen.TitleMultiLine, name='Block ICMP echo requests?', values=['Yes', 'No'])
-        self.synFlood = self.add(npyscreen.TitleMultiLine, name='Protect from SYN flood attacks?', values=['Yes', 'No'])
+        #self.icmpFrag = self.add(npyscreen.TitleMultiLine, name='Protect from ICMP Fragmentation attacks?', values=['Yes', 'No'])
+        #self.icmpSmurf = self.add(npyscreen.TitleMultiLine, name='Protect from ICMP Smurf attacks?', values=['Yes', 'No'])
+        #self.icmpEcho = self.add(npyscreen.TitleMultiLine, name='Block ICMP echo requests?', values=['Yes', 'No'])
+        #self.synFlood = self.add(npyscreen.TitleMultiLine, name='Protect from SYN flood attacks?', values=['Yes', 'No'])
 
     def on_ok(self):
         portsAllowedThroughUdp = []
