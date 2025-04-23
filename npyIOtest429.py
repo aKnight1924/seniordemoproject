@@ -280,13 +280,12 @@ class OtherOptions3Form(npyscreen.ActionForm):
             config_data.extend([
                 "    iptables -N multicast-dhcp",
                 "    iptables -I nixos-fw 1 -p udp -d 224.0.0.251 --sport 67:68 --dport 67:69 -j multicast-dhcp",
-                "    iptables -A icmp-frag -m length --length 20:1492 -j RETURN",
-                "    iptables -A icmp-frag -j nixos-fw-log-refuse"
+                "    iptables -A multicast-dhcp -j nixos-fw-log-refuse"
                 ])
         #Output chain commands
         config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
         if 0 in self.parentApp.icmpEchoVar:
-            config_data.append("    iptables -A nisow-fw-output -p icmp ! --icmp-type echo-reply -j nixos-fw-accept")
+            config_data.append("    iptables -A nisos-fw-output -p icmp ! --icmp-type echo-reply -j nixos-fw-accept")
         for x in portsAllowedOutTcp:
             config_data.append(f"    iptables -A nixos-fw-output -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedOutUdp:
