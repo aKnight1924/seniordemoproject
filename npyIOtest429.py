@@ -5,13 +5,14 @@ import npyscreen
 
 class MyTestApp(npyscreen.NPSAppManaged):
     #Gloval variables
-    allowedThrough, allowedIn, allowedOut = None, None, None
+    allowedThrough, allowedIn, allowedOut, mDHCPVar, icmpFragVar, icmpSmurfVar, icmpEchoVar, synFloodVar = None, None, None, None, None, None, None, None
     def onStart(self):
         self.registerForm("MAIN", MainForm())
         self.registerForm("AllowedIn", AllowedInForm())
         self.registerForm("AllowedOut", AllowedOutForm())
-        self.registerForm("OtherOptions", OtherOptionsForm())
-
+        self.registerForm("OtherOptions1", OtherOptions1Form())
+        self.registerForm("OtherOptions2", OtherOptions2Form())
+        self.registerForm("OtherOptions3", OtherOptions3Form())
     
 class MainForm(npyscreen.ActionForm):
     def activate(self):
@@ -42,17 +43,49 @@ class AllowedInForm(npyscreen.ActionForm):
 class AllowedOutForm(npyscreen.ActionForm):
     def activate(self):
         self.edit()
-        self.parentApp.setNextForm("OtherOptions")
+        self.parentApp.setNextForm("OtherOptions1")
         
     def create(self):
         self.allowedOut = self.add(npyscreen.TitleMultiSelect, name='Select which services are allowed to be accessed from the firewall:', values=['SSH', 'HTTP', 'HTTPS', 'DNS'],scroll_exit=True)
 
     def on_ok(self):
         self.parentApp.allowedOut = self.allowedOut.value
-        self.parentApp.switchForm("OtherOptions")
+        self.parentApp.switchForm("OtherOptions1")
 
 
-class OtherOptionsForm(npyscreen.ActionForm):
+class OtherOptions1Form(npyscreen.ActionForm):
+    def activate(self):
+        self.edit()
+        self.parentApp.setNextForm("OtherOptions2")
+    
+    def create(self):
+        self.mDHCP = self.add(npyscreen.TitleSelectOne, max_height=4, name='Block multicast DHCP?', values=['Yes', 'No'])
+        self.icmpFrag = self.add(npyscreen.TitleSelectOne, max_height=4, name='Protect from ICMP Fragmentation attacks?', values=['Yes', 'No'])
+        self.icmpSmurf = self.add(npyscreen.TitleSelectOne, max_height=4,name='Protect from ICMP Smurf attacks?', values=['Yes', 'No'])
+
+    def on_ok(self):
+        self.parentApp.mDHCPVar = self.mDHCP.value
+        self.parentApp.icmpFragVar = self.icmpFrag.value
+        self.parentApp.icmpSmurfVar = self.icmpSmurf.value
+        self.parentApp.switchForm("OtherOptions2")
+
+
+class OtherOptions2Form(npyscreen.ActionForm):
+    def activate(self):
+        self.edit()
+        self.parentApp.setNextForm("OtherOptions3")
+    
+    def create(self):
+        self.icmpEcho = self.add(npyscreen.TitleSelectOne, max_height=4, name='Block ICMP echo requests?', values=['Yes', 'No'])
+        self.synFlood = self.add(npyscreen.TitleSelectOne, max_height=4, name='Protect from SYN flood attacks?', values=['Yes', 'No'])
+
+    def on_ok(self):
+        self.parentApp.icmpEchoVar = self.icmpEcho.value
+        self.parentApp.synFloodVar = self.synFlood.value
+        self.parentApp.switchForm("OtherOptions3")
+
+
+class OtherOptions3Form(npyscreen.ActionForm):
     def activate(self):
         self.edit()
         self.parentApp.setNextForm(None)
@@ -61,11 +94,6 @@ class OtherOptionsForm(npyscreen.ActionForm):
         self.customSSHPort = self.add(npyscreen.TitleText, name='Set SSH server port:', value='22')
         self.public = self.add(npyscreen.TitleText, name='Set public interface name:', value='enp0s8')
         self.private = self.add(npyscreen.TitleText, name='Set public interface name:', value='enp0s9')
-        self.mDHCP = self.add(npyscreen.TitleMultiLine, name='Block multicast DHCP?', values=['Yes', 'No'])
-        #self.icmpFrag = self.add(npyscreen.TitleMultiLine, name='Protect from ICMP Fragmentation attacks?', values=['Yes', 'No'])
-        #self.icmpSmurf = self.add(npyscreen.TitleMultiLine, name='Protect from ICMP Smurf attacks?', values=['Yes', 'No'])
-        #self.icmpEcho = self.add(npyscreen.TitleMultiLine, name='Block ICMP echo requests?', values=['Yes', 'No'])
-        #self.synFlood = self.add(npyscreen.TitleMultiLine, name='Protect from SYN flood attacks?', values=['Yes', 'No'])
 
     def on_ok(self):
         portsAllowedThroughUdp = []
@@ -87,7 +115,7 @@ class OtherOptionsForm(npyscreen.ActionForm):
             portsAllowedThroughUdp.append(53)
         #ports allowed coming in to firewall
         if 0 in self.parentApp.allowedOut:
-            portsAllowedOutTcp.append(self.customSSHPort)
+            portsAllowedOutTcp.append(self.customSSHPort.value)
         if 1 in self.parentApp.allowedIn:
             portsAllowedInTcp.append(80)
         if 2 in self.parentApp.allowedIn:
@@ -213,43 +241,43 @@ class OtherOptionsForm(npyscreen.ActionForm):
             ])
         #Forward chain commands
         for x in portsAllowedThroughTcp:
-            config_data.append(f"    iptables -A nixos-fw-forward -i {self.public} -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -A nixos-fw-forward -i {self.public.value} -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedThroughUdp:
-            config_data.append(f"    iptables -A nixos-fw-forward -i {self.public} -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
-        config_data.append(f"    iptables -A nixos-fw-forward -i {self.private} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
-        config_data.append(f"    iptables -A nixos-fw-forward -i {self.public} -m state --state RELATED,ESTABLISHED -j nixos-fw-accept")
+            config_data.append(f"    iptables -A nixos-fw-forward -i {self.public.value} -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+        config_data.append(f"    iptables -A nixos-fw-forward -i {self.private.value} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
+        config_data.append(f"    iptables -A nixos-fw-forward -i {self.public.value} -m state --state RELATED,ESTABLISHED -j nixos-fw-accept")
         config_data.append("    iptables -A nixos-fw-forward -j nixos-fw-log-refuse")
         #Input chain commands 
         for x in portsAllowedInUdp:
             config_data.append(f"    iptables -I nixos-fw 2 -p udp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedInTcp:
             config_data.append(f"    iptables -I nixos-fw 2 -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
-        if self.icmpEcho.value == 0:
+        if 0 in self.parentApp.icmpEchoVar:
             config_data.append("    iptables -I nixos-fw 2 -p icmp ! --icmp-type echo-request -j ACCEPT")
         config_data.append("    iptables -I nixos-fw 2 -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
-        if self.synFlood.value == 0:
-            config_data.append([
+        if 0 in self.parentApp.synFloodVar:
+            config_data.extend([
                 "    iptables -N syn-limit",
                 "    iptables -I nixos-fw 1 -p tcp --syn -j syn-limit",
                 "    iptables -A syn-limit -m hashlimit --hashlimit-upto 4/sec --hashlimit-burst 3 --hashlimit-mode srcip --hashlimit-name conn_rate_limit -j nixos-fw-accept",
                 "    iptables -A syn-limit -j nixos-fw-log-refuse"
                 ])
-        if self.icmpSmurf.value == 0:
-            config_data.append([
+        if 0 in self.parentApp.icmpSmurfVar:
+            config_data.extend([
                 "    iptables -N icmp-smurf",
                 "    iptables -I nixos-fw 1 -p icmp -j icmp-smurf",
                 "    iptables -A icmp-smurf -m hashlimit --hashlimit-upto 2/sec --hashlimit-burst 2 --hashlimit-mode srcip --hashlimit-name conn_rate_limit -j RETURN",
                 "    iptables -A icmp-smurf -j nixos-fw-log-refuse"
                 ])
-        if self.icmpFrag.value == 0:
-            config_data.append([
+        if 0 in self.parentApp.icmpFragVar:
+            config_data.extend([
                 "    iptables -N icmp-frag",
                 "    iptables -I nixos-fw 1 -p icmp -j icmp-frag",
                 "    iptables -A icmp-frag -m length --length 20:1492 -j RETURN",
                 "    iptables -A icmp-frag -j nixos-fw-log-refuse"
                 ])
-        if self.mDHCP.value == 0:
-            config_data.append([
+        if 0 in self.parentApp.mDHCPVar:
+            config_data.extend([
                 "    iptables -N multicast-dhcp",
                 "    iptables -I nixos-fw 1 -p udp -d 224.0.0.251 --sport 67:68 --dport 67:69 -j multicast-dhcp",
                 "    iptables -A icmp-frag -m length --length 20:1492 -j RETURN",
@@ -257,7 +285,7 @@ class OtherOptionsForm(npyscreen.ActionForm):
                 ])
         #Output chain commands
         config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
-        if self.icmpEcho.value == 0:
+        if 0 in self.parentApp.icmpEchoVar:
             config_data.append("    iptables -A nisow-fw-output -p icmp ! --icmp-type echo-reply -j nixos-fw-accept")
         for x in portsAllowedOutTcp:
             config_data.append(f"    iptables -A nixos-fw-output -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
