@@ -236,7 +236,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
             "    iptables -N nixos-fw-forward",
             "    iptables -N nixos-fw-output",
             "    iptables -A FORWARD -j nixos-fw-forward",
-            "    iptables -A OUTPUT -j nixos-fw-output"
+            "    iptables -A OUTPUT -j nixos-fw-output",
             "    iptables -A nixos-fw-output -o lo -j nixos-fw-accept"
             ])
         #Forward chain commands
