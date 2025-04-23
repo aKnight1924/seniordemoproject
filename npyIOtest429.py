@@ -285,7 +285,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
         #Output chain commands
         config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
         if 0 in self.parentApp.icmpEchoVar:
-            config_data.append("    iptables -A nisos-fw-output -p icmp ! --icmp-type echo-reply -j nixos-fw-accept")
+            config_data.append("    iptables -A nixos-fw-output -p icmp ! --icmp-type echo-reply -j nixos-fw-accept")
         for x in portsAllowedOutTcp:
             config_data.append(f"    iptables -A nixos-fw-output -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         for x in portsAllowedOutUdp:
