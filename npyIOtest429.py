@@ -297,7 +297,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
             "  extraStopCommands = ''",
             "        iptables -F",
             "        iptables -X",
-            "; #removes the previous commands on shut down",
+            "''; #removes the previous commands on shut down",
             '};',
             '',
             '  # Copy the NixOS configuration file and link it from the resulting system',
