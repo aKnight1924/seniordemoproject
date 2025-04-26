@@ -94,6 +94,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
         self.customSSHPort = self.add(npyscreen.TitleText, name='Set SSH server port:', value='22')
         self.public = self.add(npyscreen.TitleText, name='Set public interface name:', value='enp0s8')
         self.private = self.add(npyscreen.TitleText, name='Set public interface name:', value='enp0s9')
+        self.fileName = self.add(npyscreen.TitleText, name='Set configuration file name:', value='configuration.nix')
 
     def on_ok(self):
         portsAllowedThroughUdp = []
@@ -114,7 +115,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
             portsAllowedThroughTcp.append(53)
             portsAllowedThroughUdp.append(53)
         #ports allowed coming in to firewall
-        if 0 in self.parentApp.allowedOut:
+        if 0 in self.parentApp.allowedIn:
             portsAllowedOutTcp.append(self.customSSHPort.value)
         if 1 in self.parentApp.allowedIn:
             portsAllowedInTcp.append(80)
@@ -254,7 +255,9 @@ class OtherOptions3Form(npyscreen.ActionForm):
             config_data.append(f"    iptables -I nixos-fw 2 -p tcp --dport {x} -m state --state NEW,ESTABLISHED -j nixos-fw-accept")
         if 0 in self.parentApp.icmpEchoVar:
             config_data.append("    iptables -I nixos-fw 2 -p icmp ! --icmp-type echo-request -j ACCEPT")
-        config_data.append("    iptables -I nixos-fw 2 -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
+        else:
+            config_data.append("    iptables -I nixos-fw 2 -p icmp -j ACCEPT")
+        config_data.append("    iptables -I nixos-fw 2 -p udp --sport 67:68 --dport 67:68 -j nixos-fw-accept")
         if 0 in self.parentApp.synFloodVar:
             config_data.extend([
                 "    iptables -N syn-limit",
@@ -295,9 +298,9 @@ class OtherOptions3Form(npyscreen.ActionForm):
             "    iptables -A nixos-fw-output -j nixos-fw-log-refuse",
             "  '';",
             "  extraStopCommands = ''",
-            "        iptables -F",
-            "        iptables -X",
-            "''; #removes the previous commands on shut down",
+            "    iptables -F",
+            "    iptables -X",
+            "  ''; #removes the previous commands on shut down",
             '};',
             '',
             '  # Copy the NixOS configuration file and link it from the resulting system',
@@ -325,7 +328,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
             '  system.stateVersion = "24.11"; # Did you read the comment?',
             '}'
             ])
-        file = open("TestConfig.txt", 'w')
+        file = open(f"{self.fileName.value}", 'w')
         for line in config_data:
                 file.write(line + '\n')
         file.close()
