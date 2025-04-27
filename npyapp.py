@@ -116,7 +116,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
             portsAllowedThroughUdp.append(53)
         #ports allowed coming in to firewall
         if 0 in self.parentApp.allowedIn:
-            portsAllowedOutTcp.append(self.customSSHPort.value)
+            portsAllowedInTcp.append(self.customSSHPort.value)
         if 1 in self.parentApp.allowedIn:
             portsAllowedInTcp.append(80)
         if 2 in self.parentApp.allowedIn:
