@@ -286,7 +286,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
                 "    iptables -A multicast-dhcp -j nixos-fw-log-refuse"
                 ])
         #Output chain commands
-        config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:69 -j nixos-fw-accept")
+        config_data.append("    iptables -A nixos-fw-output -p udp --sport 67:68 --dport 67:68 -j nixos-fw-accept")
         if 0 in self.parentApp.icmpEchoVar:
             config_data.append("    iptables -A nixos-fw-output -p icmp ! --icmp-type echo-reply -j nixos-fw-accept")
         for x in portsAllowedOutTcp:
