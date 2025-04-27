@@ -282,7 +282,7 @@ class OtherOptions3Form(npyscreen.ActionForm):
         if 0 in self.parentApp.mDHCPVar:
             config_data.extend([
                 "    iptables -N multicast-dhcp",
-                "    iptables -I nixos-fw 1 -p udp -d 224.0.0.251 --sport 67:68 --dport 67:69 -j multicast-dhcp",
+                "    iptables -I nixos-fw 1 -p udp -d 224.0.0.251 --sport 67:68 --dport 67:68 -j multicast-dhcp",
                 "    iptables -A multicast-dhcp -j nixos-fw-log-refuse"
                 ])
         #Output chain commands
