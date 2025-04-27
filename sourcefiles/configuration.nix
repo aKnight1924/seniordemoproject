@@ -96,7 +96,7 @@
 networking.firewall = {
   enable = true;
   allowPing = false; # ** parameter to configure whether or not replying to ICMP requests is allowed
-  allowedTCPPorts = [ 22 ]; # **parameter for allowed TCP ports
+  #allowedTCPPorts = []; # **parameter for allowed TCP ports
   #allowedUDPPorts = []; # **parameter for allowed UDP ports
   #extraCommands = []; # ** parameter for chain/state specific firewall rules or NAT
   #extraStopCommands = []; # removes the previous commands on shut down
